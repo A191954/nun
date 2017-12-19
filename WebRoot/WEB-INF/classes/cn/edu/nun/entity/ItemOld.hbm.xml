@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-2-4 2:40:47 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="cn.edu.nun.entity.ItemOld" table="ITEMOLD" dynamic-insert="true" dynamic-update="true">
+        <id name="id" type="int">
+            <column name="ITEMOLDID" />
+            <generator class="increment" />
+        </id>
+        <property name="itemName" type="java.lang.String">
+            <column name="ITEMNAME" />
+        </property>
+        <property name="content" type="java.lang.String">
+            <column name="CONTENT" />
+        </property>
+        <property name="money" type="int">
+            <column name="MONEY" />
+        </property>
+        <property name="publishTime" type="java.util.Date">
+            <column name="PUBLISHTIME" />
+        </property>
+        <many-to-one name="publisher" class="cn.edu.nun.entity.Publisher" fetch="join">
+            <column name="PUBLISHER_ID" not-null="true"/>
+        </many-to-one>
+        <set name="applicants" table="APP_ITEMOLD" inverse="false" lazy="true">
+            <key>
+                <column name="ITEMOLDID" />
+            </key>
+            <many-to-many class="cn.edu.nun.entity.Applicant" column="APPID"/>
+        </set>
+    </class>
+</hibernate-mapping>

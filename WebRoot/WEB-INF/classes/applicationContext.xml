@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	<!-- 
+		配置dataSource
+	 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+	    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/nun?useUnicode=true&amp;characterEncoding=utf-8"/>
+	    <property name="user" value="root"/>
+	    <property name="password" value=""/>
+	</bean>
+	<!-- 配置sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	     <property name="dataSource" ref="dataSource"/>
+	     <property name="mappingResources">
+		    <list>
+		      <value>cn/edu/nun/entity/Admin.hbm.xml</value>
+		      <value>cn/edu/nun/entity/Applicant.hbm.xml</value>
+		      <value>cn/edu/nun/entity/Checkor.hbm.xml</value>
+		      <value>cn/edu/nun/entity/Menber.hbm.xml</value>
+		      <value>cn/edu/nun/entity/ItemNew.hbm.xml</value>
+		      <value>cn/edu/nun/entity/ItemOld.hbm.xml</value>
+		      <value>cn/edu/nun/entity/Publisher.hbm.xml</value>
+		      <value>cn/edu/nun/entity/AppBook.hbm.xml</value>
+		    </list>
+	     </property>
+	     <property name="hibernateProperties">
+		    <props>
+		    	<prop key="hibernate_dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop> 
+		    	<prop key="hibernate.show_sql">true</prop>
+		    	<prop key="hbm2ddl.auto">none</prop>	    
+		    </props>
+	    </property>
+	</bean>
+    <!-- 配置Hibernate的局部事务管理器，使用HibernateTransactionManager类-->
+    <!-- 该类实现PlatformTransactionManager接口，是针对Hibernate的特定实现类-->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+   
+   
+   <!--配置事务增强处理Bean,指定事务管理器-->
+   <tx:advice id="txAdvice" transaction-manager="transactionManager">
+         <!--用于配置详细的事务语义-->
+         <tx:attributes>
+             <!-- 所有以'get'开头的方法是read-only-->
+             <tx:method name="get*" read-only="true"/>
+             <!-- 其他方法使用默认的事务设置-->
+             <tx:method name="*"/>
+         </tx:attributes>
+   </tx:advice>
+   
+   	<aop:config>
+        <aop:pointcut id="serviceOperation" expression="execution(* cn.edu.nun.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
+    </aop:config>
+	<!-- dao start -->
+	<bean id="adminDao" class="cn.edu.nun.dao.impl.AdminDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="applicantDao" class="cn.edu.nun.dao.impl.ApplicantDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="checkorDao" class="cn.edu.nun.dao.impl.CheckorDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="publisherDao" class="cn.edu.nun.dao.impl.PublisherDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="menberDao" class="cn.edu.nun.dao.impl.MenberDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="itemNewDao" class="cn.edu.nun.dao.impl.ItemNewDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="itemOldDao" class="cn.edu.nun.dao.impl.ItemOldDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- dao end -->
+	
+	<!-- service start -->
+	<bean id="adminService" class="cn.edu.nun.service.impl.AdminServiceImpl">
+		<property name="adminDao" ref="adminDao"></property>
+	</bean>
+	
+	<bean id="applicantService" class="cn.edu.nun.service.impl.ApplicantServiceImpl">
+		<property name="applicantDao" ref="applicantDao"></property>
+	</bean>
+	
+	<bean id="checkorService" class="cn.edu.nun.service.impl.CheckorServiceImpl">
+		<property name="checkorDao" ref="checkorDao"></property>
+	</bean>
+	
+	<bean id="publisherService" class="cn.edu.nun.service.impl.PublisherServiceImpl">
+		<property name="publisherDao" ref="publisherDao"></property>
+	</bean>
+	
+	<bean id="itemNewService" class="cn.edu.nun.service.impl.ItemNewServiceImpl">
+		<property name="itemNewDao" ref="itemNewDao"></property>
+	</bean>
+	
+	<bean id="itemOldService" class="cn.edu.nun.service.impl.ItemOldServiceImpl">
+		<property name="itemOldDao" ref="itemOldDao"></property>
+	</bean>
+	<!-- service end -->
+	
+	<!-- action start -->
+	<bean id="goLoginAction" class="cn.edu.nun.action.goLogin.GoLoginAction" scope="prototype">
+	</bean>
+	<bean id="outLoginAction" class="cn.edu.nun.action.outLogin.OutLoginAction" scope="prototype">
+	</bean>
+	<bean id="adminLoginIndex" class="cn.edu.nun.action.admin.AdminLoginIndex" scope="prototype">
+	</bean>
+		<!-- admin action start -->
+	<bean id="adminLoginAction" class="cn.edu.nun.action.admin.AdminLoginAction" scope="prototype">
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+		<!-- admin action end -->
+		
+		<!-- applicant action start -->
+	<bean id="applicantLoginAction" class="cn.edu.nun.action.applicant.ApplicantLoginAction" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantLoginOutAction" class="cn.edu.nun.action.applicant.ApplicantLoginOutAction" scope="prototype">
+	</bean>
+	<bean id="applicantFindOldHistory" class="cn.edu.nun.action.applicant.ApplicantFindOldHistory" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantShowItemNew" class="cn.edu.nun.action.applicant.ApplicantShowItemNew" scope="prototype">
+		<property name="itemNewService" ref="itemNewService"></property>
+	</bean>
+	<bean id="applicantDeclareItemNew" class="cn.edu.nun.action.applicant.ApplicantDeclareItemNew" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	
+	<bean id="applicantFindMenbers" class="cn.edu.nun.action.applicant.ApplicantFindMenbers" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantAddMenber" class="cn.edu.nun.action.applicant.ApplicantAddMenber" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantDeleteMenber" class="cn.edu.nun.action.applicant.ApplicantDeleteMenber" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantUpdateMenber" class="cn.edu.nun.action.applicant.ApplicantUpdateMenber" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantFindItemNew" class="cn.edu.nun.action.applicant.ApplicantFindItemNew" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantCancelItemNew" class="cn.edu.nun.action.applicant.ApplicantCancelItemNew" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantPublishAppBook" class="cn.edu.nun.action.applicant.ApplicantPublishAppBook" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+	<bean id="applicantFindAppBook" class="cn.edu.nun.action.applicant.ApplicantFindAppBook" scope="prototype">
+		<property name="applicantService" ref="applicantService"></property>
+	</bean>
+		<!-- applicant action end -->
+	
+		<!-- publisher action start -->
+	<bean id="publisherLoginAction" class="cn.edu.nun.action.publisher.PublisherLoginAction" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+	<bean id="publisherLoginOutAction" class="cn.edu.nun.action.publisher.PublisherLoginOutAction" scope="prototype">
+	</bean>
+	<bean id="publisherFindHistoryPublishItem" class="cn.edu.nun.action.publisher.PublisherFindHistoryPublishItem" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+	<bean id="publisherAddItemNew" class="cn.edu.nun.action.publisher.PublisherAddItemNew" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+	<bean id="publisherFindItemNew" class="cn.edu.nun.action.publisher.PublisherFindItemNew" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+	<bean id="publisherUpdateItemNew" class="cn.edu.nun.action.publisher.PublisherUpdateItemNew" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+	<bean id="publisherFindItemNewApplicant" class="cn.edu.nun.action.publisher.PublisherFindItemNewApplicant" scope="prototype">
+		<property name="publisherService" ref="publisherService"></property>
+	</bean>
+		<!-- publisher action end -->
+		
+		<!-- checkor action start -->
+	<bean id="checkorLoginAction" class="cn.edu.nun.action.checkor.CheckorLoginAction" scope="prototype">
+		<property name="checkorService" ref="checkorService"></property>
+	</bean>
+	<bean id="checkorFindAllPublishItemNewApplicants" class="cn.edu.nun.action.checkor.CheckorFindAllPublishItemNewApplicants" scope="prototype">
+		<property name="checkorService" ref="checkorService"></property>
+	</bean>
+	<bean id="checkApplicantItemNew" class="cn.edu.nun.action.checkor.CheckApplicantItemNew" scope="prototype">
+		<property name="checkorService" ref="checkorService"></property>
+	</bean>	
+	<bean id="checkorFindCheckedApplicants" class="cn.edu.nun.action.checkor.CheckorFindCheckedApplicants" scope="prototype">
+		<property name="checkorService" ref="checkorService"></property>
+	</bean>
+	<bean id="checkorAppBook" class="cn.edu.nun.action.checkor.CheckorAppBook" scope="prototype">
+		<property name="checkorService" ref="checkorService"></property>
+	</bean>			
+		<!-- checkor action end -->
+	<!-- action end -->
+</beans>
+
+
+
+
+
+
+
+
+
+
+

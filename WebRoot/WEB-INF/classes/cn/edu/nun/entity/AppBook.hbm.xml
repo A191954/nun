@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-10-31 20:36:01 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="cn.edu.nun.entity.AppBook" table="appbook">
+        <id name="id" type="int" access="field">
+            <column name="id" />
+            <generator class="foreign">
+            	<param name="property">applicant</param>
+            </generator>
+        </id>
+        
+        <property name="textBody" type="java.sql.Clob" length="16777216">
+            <column name="textBody" />
+        </property>
+        
+        <one-to-one name="applicant" class="cn.edu.nun.entity.Applicant" constrained="true">
+        </one-to-one>
+    </class>
+</hibernate-mapping>

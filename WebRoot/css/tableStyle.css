@@ -1,0 +1,12 @@
+
+#table{
+	box-shadow: 2px 2px 6px 0px #333;
+}
+#table tr{
+	color: #8a6d3b;
+	font-size: 12px;
+}
+#table tr.info{
+	color: rgba(255, 0, 0, 0.46);
+	font-size: 14px;
+}

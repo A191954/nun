@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+	"http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<!-- START SNIPPET: xworkSample -->
+<struts>
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="false" />
+    <package name="goLogin" extends="struts-default" namespace="/">
+    	<action name="goLoginAction" class="goLoginAction">
+    		<result>/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    </package>
+    <package name="outLogin" extends="struts-default" namespace="/">
+    	<action name="outLoginAction" class="outLoginAction">
+    		<result>/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    </package>
+	<package name="applicant" extends="struts-default" namespace="/">
+    	<action name="adminLoginAction" class="adminLoginAction">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/index.jsp</result>
+    		<result name="input" type="dispatcher">/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    	<action name="applicantLoginAction" class="applicantLoginAction">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/index.jsp</result>
+    		<result name="input" type="dispatcher">/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    	<action name="applicantLoginOutAction" class="applicantLoginOutAction">
+    		<result name="input" type="redirect">goLoginAction.action</result>
+    	</action>
+    	<action name="applicantFindOldHistory" class="applicantFindOldHistory">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/findOldItem.jsp</result>
+    	</action>
+    	<action name="applicantShowItemNew" class="applicantShowItemNew">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/declareItemNew.jsp</result>
+    	</action>
+    	<action name="applicantDeclareItemNew" class="applicantDeclareItemNew">
+    		<result name="success" type="redirect">applicantFindItemNew.action</result>
+    		<result name="input" type="chain">applicantShowItemNew</result>
+    	</action>
+    	<action name="applicantFindMenbers" class="applicantFindMenbers">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/findMenbers.jsp</result>
+    	</action>
+    	<action name="applicantAddMenber" class="applicantAddMenber">
+    		<result name="success" type="redirect">applicantFindMenbers.action</result>
+    	</action>
+    	<action name="applicantDeleteMenber" class="applicantDeleteMenber">
+    		<result name="success" type="redirect">applicantFindMenbers.action</result>
+    	</action>
+    	<action name="applicantUpdateMenber" class="applicantUpdateMenber">
+    		<result name="success" type="redirect">applicantFindMenbers.action</result>
+    	</action>
+    	<action name="applicantFindItemNew" class="applicantFindItemNew">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/findNewItem.jsp</result>
+    	</action>
+    	<action name="applicantFindItemNew" class="applicantFindItemNew">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/findNewItem.jsp</result>
+    	</action>
+    	<action name="applicantCancelItemNew" class="applicantCancelItemNew">
+    		<result name="success" type="redirect">applicantFindItemNew.action</result>
+    	</action>
+    	<action name="applicantPublishAppBook" class="applicantPublishAppBook">
+    		<result name="success" type="redirect">applicantFindItemNew.action</result>
+    		<result name="input" type="redirect">applicantFindItemNew.action</result>
+    	</action>
+    	<action name="applicantFindAppBook" class="applicantFindAppBook">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/applicant/findAppBook.jsp</result>
+    	</action>
+    </package>
+	<package name="publisher" extends="struts-default" namespace="/">
+    	<action name="publisherLoginAction" class="publisherLoginAction">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/index.jsp</result>
+    		<result name="input" type="dispatcher">/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    	<action name="publisherLoginOutAction" class="publisherLoginOutAction">
+    		<result name="input" type="redirect">goLoginAction.action</result>
+    	</action>
+    	<action name="publisherFindHistoryPublishItem" class="publisherFindHistoryPublishItem">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/publisher/findOldItem.jsp</result>
+    	</action>
+    	<action name="publisherAddItemNew" class="publisherAddItemNew">
+    		<result name="success" type="redirect">publisherFindItemNew.action</result>
+    	</action>
+    	<action name="publisherFindItemNew" class="publisherFindItemNew">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/publisher/findNewItem.jsp</result>
+    	</action>
+    	<action name="publisherUpdateItemNew" class="publisherUpdateItemNew">
+    		<result name="success" type="redirect">publisherFindItemNew.action</result>
+    	</action>
+    	<action name="publisherFindItemNewApplicant" class="publisherFindItemNewApplicant">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/publisher/findNewItemApplicants.jsp</result>
+    		<result name="input" type="dispatcher">/WEB-INF/jsp/publisher/findNewItemApplicants.jsp</result>
+    		<result name="none" type="dispatcher">/WEB-INF/jsp/publisher/findNewItemApplicants.jsp</result>
+    	</action>
+    </package>
+    <package name="checkor" extends="struts-default" namespace="/">
+    	<action name="checkorLoginAction" class="checkorLoginAction">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/index.jsp</result>
+    		<result name="input" type="dispatcher">/WEB-INF/jsp/login.jsp</result>
+    	</action>
+    	<action name="checkorFindAllPublishItemNewApplicants" class="checkorFindAllPublishItemNewApplicants">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/checkor/checkorFindAllPublishItemNewApplicants.jsp</result>
+    	</action>
+    	<action name="checkApplicantItemNew" class="checkApplicantItemNew">
+    		<result name="success" type="redirect">checkorFindAllPublishItemNewApplicants.action</result>
+    	</action>
+    	<action name="checkorFindCheckedApplicants" class="checkorFindCheckedApplicants">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/checkor/checkorFindCheckedApplicants.jsp</result>
+    	</action>
+    	<action name="checkorAppBook" class="checkorAppBook">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/checkor/findAppBook.jsp</result>
+    	</action>
+    </package> 
+    <package name="admin" extends="struts-default" namespace="/">
+    	<action name="adminLoginIndex" class="adminLoginIndex">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/admin/login.jsp</result>
+    	</action>
+    	<action name="adminLoginAction" class="adminLoginAction">
+    		<result name="success" type="dispatcher">/WEB-INF/jsp/index.jsp</result>
+    		<result name="input" type="redirect">adminLoginIndex.action</result>
+    	</action>
+    </package>
+</struts>
+
+<!-- END SNIPPET: xworkSample -->
+

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-2-4 2:40:47 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="cn.edu.nun.entity.Applicant" table="APPLICANT" dynamic-insert="true" dynamic-update="true">
+        <id name="id" type="java.lang.Integer">
+            <column name="APPID" />
+            <generator class="increment" />
+        </id>
+        <property name="username" type="java.lang.String">
+            <column name="USERNAME" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="PASSWORD" />
+        </property>
+        <property name="brief" type="java.lang.String">
+            <column name="BRIEF" />
+        </property>
+        <property name="usertype" type="java.lang.String">
+            <column name="USERTYPE" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        <property name="age" type="java.lang.Integer">
+            <column name="AGE" />
+        </property>
+        <property name="telephone" type="java.lang.String">
+            <column name="TELEPHONE" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="EMAIL" />
+        </property>
+        <property name="historyItemCount" type="java.lang.Integer">
+            <column name="HISTORYITEMCOUNT" />
+        </property>
+        <property name="isRequest" type="boolean" access="field">
+            <column name="ISREQUEST" />
+        </property>
+        <property name="isChecked" type="boolean" access="field">
+            <column name="ISCHECKED" />
+        </property>
+        <property name="checkedState" type="java.lang.String">
+            <column name="CHECKEDSTATE" />
+        </property>
+        <property name="noPassReason" type="java.lang.String">
+            <column name="NOPASSREASON" />
+        </property>
+        <property name="usedMoney" type="int">
+            <column name="USEDMONEY" />
+        </property>
+        <property name="remainMoney" type="int">
+            <column name="REMAINMONEY" />
+        </property>
+        <property name="isSucessEnd" type="boolean" access="field">
+            <column name="ISSUCESSEND" />
+        </property>
+        <many-to-one name="itemNew" class="cn.edu.nun.entity.ItemNew" fetch="join">
+            <column name="ITEMNEW_ID"/>
+        </many-to-one>
+        <many-to-one name="checkor" class="cn.edu.nun.entity.Checkor" fetch="join">
+            <column name="CHECKOR_ID" />
+        </many-to-one>
+        <set name="itemOlds" table="APP_ITEMOLD" inverse="true" lazy="true">
+            <key>
+                <column name="APPID" />
+            </key>
+            <many-to-many class="cn.edu.nun.entity.ItemOld" column="ITEMOLDID"/>
+        </set>
+        <set name="menbers" table="MENBER" inverse="true" lazy="true">
+            <key>
+                <column name="APP_ID" />
+            </key>
+            <one-to-many class="cn.edu.nun.entity.Menber" />
+        </set>
+        
+        <one-to-one name="appBook" class="cn.edu.nun.entity.AppBook"  cascade="all">
+        </one-to-one>
+    </class>
+</hibernate-mapping>
